@@ -68,12 +68,20 @@ class UndirectedGraph:
         """
         Remove edge from the graph
         """
-        
+        if v in self.adj_list and u in self.adj_list[v]:
+            self.adj_list[v].remove(u)
+        if u in self.adj_list and v in self.adj_list[u]:
+            self.adj_list[u].remove(v)
 
     def remove_vertex(self, v: str) -> None:
         """
         Remove vertex and all connected edges
         """
+        if v in self.adj_list:
+            del self.adj_list[v]
+        for k in self.adj_list:
+            if v in self.adj_list[k]:
+                self.adj_list[k].remove(v)
         
 
     def get_vertices(self) -> []:
@@ -142,15 +150,15 @@ if __name__ == '__main__':
     print(g)
 
 
-    # print("\nPDF - method remove_edge() / remove_vertex example 1")
-    # print("----------------------------------------------------")
-    # g = UndirectedGraph(['AB', 'AC', 'BC', 'BD', 'CD', 'CE', 'DE'])
-    # g.remove_vertex('DOES NOT EXIST')
-    # g.remove_edge('A', 'B')
-    # g.remove_edge('X', 'B')
-    # print(g)
-    # g.remove_vertex('D')
-    # print(g)
+    print("\nPDF - method remove_edge() / remove_vertex example 1")
+    print("----------------------------------------------------")
+    g = UndirectedGraph(['AB', 'AC', 'BC', 'BD', 'CD', 'CE', 'DE'])
+    g.remove_vertex('DOES NOT EXIST')
+    g.remove_edge('A', 'B')
+    g.remove_edge('X', 'B')
+    print(g)
+    g.remove_vertex('D')
+    print(g)
 
 
     # print("\nPDF - method get_vertices() / get_edges() example 1")
