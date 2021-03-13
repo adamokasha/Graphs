@@ -88,12 +88,23 @@ class UndirectedGraph:
         """
         Return list of vertices in the graph (any order)
         """
+        vertices = []
+        for v in self.adj_list:
+            vertices.append(v)
+        return vertices
+
        
 
     def get_edges(self) -> []:
         """
         Return list of edges in the graph (any order)
         """
+        all_edges = []
+        for k in self.adj_list:
+            for e in self.adj_list[k]:
+                if (e, k) not in all_edges:
+                    all_edges.append((k,e))
+        return all_edges
         
 
     def is_valid_path(self, path: []) -> bool:
@@ -161,12 +172,12 @@ if __name__ == '__main__':
     print(g)
 
 
-    # print("\nPDF - method get_vertices() / get_edges() example 1")
-    # print("---------------------------------------------------")
-    # g = UndirectedGraph()
-    # print(g.get_edges(), g.get_vertices(), sep='\n')
-    # g = UndirectedGraph(['AB', 'AC', 'BC', 'BD', 'CD', 'CE'])
-    # print(g.get_edges(), g.get_vertices(), sep='\n')
+    print("\nPDF - method get_vertices() / get_edges() example 1")
+    print("---------------------------------------------------")
+    g = UndirectedGraph()
+    print(g.get_edges(), g.get_vertices(), sep='\n')
+    g = UndirectedGraph(['AB', 'AC', 'BC', 'BD', 'CD', 'CE'])
+    print(g.get_edges(), g.get_vertices(), sep='\n')
 
 
     # print("\nPDF - method is_valid_path() example 1")
