@@ -1,8 +1,9 @@
-# Course: 
-# Author: 
-# Assignment: 
-# Description:
+# Course: CS261 - Data Structures
+# Author: Adam Okasha
+# Assignment: 6
+# Description: Graphs
 
+from collections import deque
 
 class UndirectedGraph:
     """
@@ -111,33 +112,62 @@ class UndirectedGraph:
         """
         Return true if provided path is valid, False otherwise
         """
-        if len(path) == 0:
+        if not len(path):
             return True
         v = path.pop()
         if v not in self.adj_list:
             return False
         adj_vertices = self.adj_list[v]
-        while len(path) > 0:
+        while len(path):
             v = path.pop()
             if v not in adj_vertices:
                 return False
             adj_vertices = self.adj_list[v]
         return True
        
-
     def dfs(self, v_start, v_end=None) -> []:
         """
         Return list of vertices visited during DFS search
         Vertices are picked in alphabetical order
         """
-       
-
+        if v_start not in self.adj_list:
+            return []
+        visited = []
+        stack = [v_start]
+        while len(stack):
+            v = stack.pop()
+            if v not in visited:
+                visited.append(v)
+                successors = self.adj_list[v]
+                if successors:
+                    successors.sort()
+                    successors.reverse()
+                    stack = stack + successors
+            if v == v_end:
+                break
+        return visited
+            
     def bfs(self, v_start, v_end=None) -> []:
         """
         Return list of vertices visited during BFS search
         Vertices are picked in alphabetical order
         """
-        
+        if v_start not in self.adj_list:
+            return []
+        visited = []
+        queue = deque([v_start])
+        while len(queue):
+            v = queue.popleft()
+            if v not in visited:
+                visited.append(v)
+                successors = self.adj_list[v]
+                if successors:
+                    successors.sort()
+                    for successor in successors:
+                        queue.append(successor)
+            if v == v_end:
+                break
+        return visited
 
     def count_connected_components(self):
         """
@@ -200,17 +230,17 @@ if __name__ == '__main__':
         print(list(path), g.is_valid_path(list(path)))
 
 
-    # print("\nPDF - method dfs() and bfs() example 1")
-    # print("--------------------------------------")
-    # edges = ['AE', 'AC', 'BE', 'CE', 'CD', 'CB', 'BD', 'ED', 'BH', 'QG', 'FG']
-    # g = UndirectedGraph(edges)
-    # test_cases = 'ABCDEGH'
-    # for case in test_cases:
-    #     print(f'{case} DFS:{g.dfs(case)} BFS:{g.bfs(case)}')
-    # print('-----')
-    # for i in range(1, len(test_cases)):
-    #     v1, v2 = test_cases[i], test_cases[-1 - i]
-    #     print(f'{v1}-{v2} DFS:{g.dfs(v1, v2)} BFS:{g.bfs(v1, v2)}')
+    print("\nPDF - method dfs() and bfs() example 1")
+    print("--------------------------------------")
+    edges = ['AE', 'AC', 'BE', 'CE', 'CD', 'CB', 'BD', 'ED', 'BH', 'QG', 'FG']
+    g = UndirectedGraph(edges)
+    test_cases = 'ABCDEGH'
+    for case in test_cases:
+        print(f'{case} DFS:{g.dfs(case)} BFS:{g.bfs(case)}')
+    print('-----')
+    for i in range(1, len(test_cases)):
+        v1, v2 = test_cases[i], test_cases[-1 - i]
+        print(f'{v1}-{v2} DFS:{g.dfs(v1, v2)} BFS:{g.bfs(v1, v2)}')
 
 
     # print("\nPDF - method count_connected_components() example 1")
