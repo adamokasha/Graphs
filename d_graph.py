@@ -70,10 +70,10 @@ class DirectedGraph:
         """
         TODO: Write this implementation
         """
-        # l = len(self.adj_matrix[0])
-        # if weight < 1 or src < 0 or src > l - 1 or dst < 0 or dst > l - 1 or src == dst:
-        #     return
-        
+        l = len(self.adj_matrix[0])
+        if weight < 1 or src < 0 or src > l - 1 or dst < 0 or dst > l - 1 or src == dst:
+            return
+        self.adj_matrix[src][dst] = weight 
 
     def remove_edge(self, src: int, dst: int) -> None:
         """
@@ -134,11 +134,11 @@ if __name__ == '__main__':
         g.add_vertex()
     print(g)
 
-    # edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
-    #          (3, 1, 5), (2, 1, 23), (3, 2, 7)]
-    # for src, dst, weight in edges:
-    #     g.add_edge(src, dst, weight)
-    # print(g)
+    edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
+             (3, 1, 5), (2, 1, 23), (3, 2, 7)]
+    for src, dst, weight in edges:
+        g.add_edge(src, dst, weight)
+    print(g)
 
     # print("\nPDF - method get_edges() example 1")
     # print("----------------------------------")
