@@ -185,17 +185,53 @@ class UndirectedGraph:
                     visited_map[u] = 1
                 connected_count += 1
         return connected_count
-            
-        
-      
 
     def has_cycle(self):
         """
         Return True if graph contains a cycle, False otherwise
         """
-       
+        vertices = self.adj_list.keys()
+        status = {}
+        for k in self.adj_list.keys():
+            status[k] = 'NOT_VISITED'
+        for v in vertices:
+            _has_cycle = self._dfs_has_cycle(v, None, status)
+            if _has_cycle:
+                return True
+        return False
 
-   
+    def _dfs_has_cycle(self, v, parent, status):
+        """Recursive has_cycle helper returns True when a the neighbouring
+        node is being visited and the anchor node is in the same state while
+        not being the same as the parent node. This condition means that there is
+        a cycle. 
+
+        Note: This is very loosely based on this solution linked here:
+        https://www.baeldung.com/cs/cycles-undirected-graph#cycle-detection
+        This pseudo code solution however did not work for me. For example the condition u != parent(v)
+        would return True here in all cases. I modified it to disregard the iteration when
+        u == parent(v) and call itself recursively when status of a neighbour is not 'VISITED' and added
+        a catch all of returning False.
+
+        Args:
+            v (object): current/anchor node
+            parent (object): parent node
+            status (object): holds the status of all vertices: 'NOT_VISITED', 'VISITING', 'VISITED' 
+
+        Returns:
+            bool: True if there is a cycle, False if not
+        """
+        status[v] = 'VISITING'
+        for u in self.adj_list[v]:
+            if u == parent:
+                continue
+            if status[u] == 'VISITING':
+                return True
+            elif status[u] != 'VISITED' and self._dfs_has_cycle(u, v, status):
+                return True
+        
+        status[v] = 'VISITED'
+        return False
 
 
 if __name__ == '__main__':
@@ -274,18 +310,18 @@ if __name__ == '__main__':
     print()
 
 
-    # print("\nPDF - method has_cycle() example 1")
-    # print("----------------------------------")
-    # edges = ['AE', 'AC', 'BE', 'CE', 'CD', 'CB', 'BD', 'ED', 'BH', 'QG', 'FG']
-    # g = UndirectedGraph(edges)
-    # test_cases = (
-    #     'add QH', 'remove FG', 'remove GQ', 'remove HQ',
-    #     'remove AE', 'remove CA', 'remove EB', 'remove CE', 'remove DE',
-    #     'remove BC', 'add EA', 'add EF', 'add GQ', 'add AC', 'add DQ',
-    #     'add EG', 'add QH', 'remove CD', 'remove BD', 'remove QG',
-    #     'add FG', 'remove GE')
-    # for case in test_cases:
-    #     command, edge = case.split()
-    #     u, v = edge
-    #     g.add_edge(u, v) if command == 'add' else g.remove_edge(u, v)
-    #     print('{:<10}'.format(case), g.has_cycle())
+    print("\nPDF - method has_cycle() example 1")
+    print("----------------------------------")
+    edges = ['AE', 'AC', 'BE', 'CE', 'CD', 'CB', 'BD', 'ED', 'BH', 'QG', 'FG']
+    g = UndirectedGraph(edges)
+    test_cases = (
+        'add QH', 'remove FG', 'remove GQ', 'remove HQ',
+        'remove AE', 'remove CA', 'remove EB', 'remove CE', 'remove DE',
+        'remove BC', 'add EA', 'add EF', 'add GQ', 'add AC', 'add DQ',
+        'add EG', 'add QH', 'remove CD', 'remove BD', 'remove QG',
+        'add FG', 'remove GE')
+    for case in test_cases:
+        command, edge = case.split()
+        u, v = edge
+        g.add_edge(u, v) if command == 'add' else g.remove_edge(u, v)
+        print('{:<10}'.format(case), g.has_cycle())
