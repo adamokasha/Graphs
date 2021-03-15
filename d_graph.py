@@ -3,6 +3,7 @@
 # Assignment: 6
 # Description: Graphs
 
+import heapq
 from collections import deque
 
 class DirectedGraph:
@@ -238,7 +239,24 @@ class DirectedGraph:
         """
         TODO: Write this implementation
         """
-        pass
+        visited_map = {}
+        priority_q = []
+        shortest_path = []
+        heapq.heapify(priority_q)
+        heapq.heappush(priority_q, (0, 0, src))
+        while len(priority_q):
+            _, d, v = heapq.heappop(priority_q)
+            if v not in visited_map:
+                visited_map[v] = d
+                for i in range(self.v_count):
+                    s_d = self.adj_matrix[v][i]
+                    if s_d != 0:
+                        heapq.heappush(priority_q, (d + s_d, d + s_d, i))
+                    else:
+                        heapq.heappush(priority_q, (float('inf'), float('inf'), i))
+        for i in range(self.v_count):
+            shortest_path.append(visited_map[i])
+        return shortest_path
 
 
 if __name__ == '__main__':
@@ -300,14 +318,14 @@ if __name__ == '__main__':
         print(g.get_edges(), g.has_cycle(), sep='\n')
     print('\n', g)
 
-    # print("\nPDF - dijkstra() example 1")
-    # print("--------------------------")
-    # edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
-    #          (3, 1, 5), (2, 1, 23), (3, 2, 7)]
-    # g = DirectedGraph(edges)
-    # for i in range(5):
-    #     print(f'DIJKSTRA {i} {g.dijkstra(i)}')
-    # g.remove_edge(4, 3)
-    # print('\n', g)
-    # for i in range(5):
-    #     print(f'DIJKSTRA {i} {g.dijkstra(i)}')
+    print("\nPDF - dijkstra() example 1")
+    print("--------------------------")
+    edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
+             (3, 1, 5), (2, 1, 23), (3, 2, 7)]
+    g = DirectedGraph(edges)
+    for i in range(5):
+        print(f'DIJKSTRA {i} {g.dijkstra(i)}')
+    g.remove_edge(4, 3)
+    print('\n', g)
+    for i in range(5):
+        print(f'DIJKSTRA {i} {g.dijkstra(i)}')
