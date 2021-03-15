@@ -181,11 +181,58 @@ class DirectedGraph:
                 break
         return visited
 
+    # def has_cycle(self):
+    #     """
+    #     TODO: Write this implementation
+    #     """
+    #     pass
+
     def has_cycle(self):
         """
-        TODO: Write this implementation
+        Return True if graph contains a cycle, False otherwise
         """
-        pass
+        vertices = []
+        for i in range(self.v_count):
+            vertices.append(i)
+        status = {}
+        for k in vertices:
+            status[k] = 'NOT_VISITED'
+        for v in vertices:
+            _has_cycle = self._dfs_has_cycle(v, None, status)
+            if _has_cycle:
+                return True
+        return False
+
+    def _dfs_has_cycle(self, v, parent, status):
+        """Recursive has_cycle helper returns True when a the neighbouring
+        node is being visited and the anchor node is in the same state while
+        not being the same as the parent node. This condition means that there is
+        a cycle. 
+
+        Note: This is very loosely based on this solution linked here:
+        https://www.baeldung.com/cs/cycles-undirected-graph#cycle-detection
+        The expanation and modifications used can be found in ud_graph.py comments.
+        The difference between the undirected graph and the directed graph implementation
+        is that two vertices pointing to each other can be considered a cycle.
+
+        Args:
+            v (object): current/anchor node
+            parent (object): parent node
+            status (object): holds the status of all vertices: 'NOT_VISITED', 'VISITING', 'VISITED' 
+
+        Returns:
+            bool: True if there is a cycle, False if not
+        """
+        status[v] = 'VISITING'
+        adj_vertices = self._get_adj_vertices(v)
+        for u in adj_vertices:
+            if status[u] == 'VISITING':
+                return True
+            elif status[u] != 'VISITED' and self._dfs_has_cycle(u, v, status):
+                return True
+        
+        status[v] = 'VISITED'
+        return False
 
     def dijkstra(self, src: int) -> []:
         """
@@ -236,22 +283,22 @@ if __name__ == '__main__':
     for start in range(5):
         print(f'{start} DFS:{g.dfs(start)} BFS:{g.bfs(start)}')
 
-    # print("\nPDF - method has_cycle() example 1")
-    # print("----------------------------------")
-    # edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
-    #          (3, 1, 5), (2, 1, 23), (3, 2, 7)]
-    # g = DirectedGraph(edges)
+    print("\nPDF - method has_cycle() example 1")
+    print("----------------------------------")
+    edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
+             (3, 1, 5), (2, 1, 23), (3, 2, 7)]
+    g = DirectedGraph(edges)
 
-    # edges_to_remove = [(3, 1), (4, 0), (3, 2)]
-    # for src, dst in edges_to_remove:
-    #     g.remove_edge(src, dst)
-    #     print(g.get_edges(), g.has_cycle(), sep='\n')
+    edges_to_remove = [(3, 1), (4, 0), (3, 2)]
+    for src, dst in edges_to_remove:
+        g.remove_edge(src, dst)
+        print(g.get_edges(), g.has_cycle(), sep='\n')
 
-    # edges_to_add = [(4, 3), (2, 3), (1, 3), (4, 0)]
-    # for src, dst in edges_to_add:
-    #     g.add_edge(src, dst)
-    #     print(g.get_edges(), g.has_cycle(), sep='\n')
-    # print('\n', g)
+    edges_to_add = [(4, 3), (2, 3), (1, 3), (4, 0)]
+    for src, dst in edges_to_add:
+        g.add_edge(src, dst)
+        print(g.get_edges(), g.has_cycle(), sep='\n')
+    print('\n', g)
 
     # print("\nPDF - dijkstra() example 1")
     # print("--------------------------")
