@@ -54,8 +54,10 @@ class DirectedGraph:
     # ------------------------------------------------------------------ #
 
     def add_vertex(self) -> int:
-        """
-        TODO: Write this implementation
+        """Adds a new vertex to the graph
+
+        Returns:
+            int: the number of vertices in the graph after the addition
         """
         self.v_count += 1
         if not len(self.adj_matrix):
@@ -70,8 +72,12 @@ class DirectedGraph:
         return self.v_count
 
     def add_edge(self, src: int, dst: int, weight=1) -> None:
-        """
-        TODO: Write this implementation
+        """Adds a new edge to the graph, connecting the two vertices with provided indices
+
+        Args:
+            src (int): source vertex
+            dst (int): destination vertex
+            weight (int, optional): Weight of the edge. Defaults to 1.
         """
         l = len(self.adj_matrix[0])
         if weight < 1 or src < 0 or src > l - 1 or dst < 0 or dst > l - 1 or src == dst:
@@ -79,8 +85,11 @@ class DirectedGraph:
         self.adj_matrix[src][dst] = weight 
 
     def remove_edge(self, src: int, dst: int) -> None:
-        """
-        TODO: Write this implementation
+        """Removes an edge between the two vertices provided
+
+        Args:
+            src (int): source vertex
+            dst (int): destination vertex
         """
         l = len(self.adj_matrix[0])
         if src < 0 or src > l - 1 or dst < 0 or dst > l - 1 or src == dst:
@@ -88,8 +97,10 @@ class DirectedGraph:
         self.adj_matrix[src][dst] = 0
 
     def get_vertices(self) -> []:
-        """
-        TODO: Write this implementation
+        """Returns a list of the vertices of the graph
+
+        Returns:
+            []: list of vertices
         """
         if not len(self.adj_matrix):
             return []
@@ -100,8 +111,11 @@ class DirectedGraph:
 
 
     def get_edges(self) -> []:
-        """
-        TODO: Write this implementation
+        """Returns a list of the edges in the graph as a tuple of the two incident 
+        vertices and the weight of the edge
+
+        Returns:
+            []: list of the edges
         """
         edges = []
         for i in range(self.v_count):
@@ -111,8 +125,13 @@ class DirectedGraph:
         return edges
 
     def is_valid_path(self, path: []) -> bool:
-        """
-        TODO: Write this implementation
+        """Checks if path list is valid
+
+        Args:
+            path ([]): The path to validate
+
+        Returns:
+            bool: True if valid, False otherwise
         """
         for i in range(len(path)):
             current_step = path[i]
@@ -122,14 +141,6 @@ class DirectedGraph:
                 if weight == 0:
                     return False
         return True
-
-
-
-    # def dfs(self, v_start, v_end=None) -> []:
-    #     """
-    #     TODO: Write this implementation
-    #     """
-    #     pass
 
     def dfs(self, v_start, v_end=None) -> []:
         """
@@ -236,8 +247,15 @@ class DirectedGraph:
         return False
 
     def dijkstra(self, src: int) -> []:
-        """
-        TODO: Write this implementation
+        """Returns a list of the shortest path where index 0 is from src to 0
+        and index 1 is shortest path from 0 to 1 and so on. If a value is not reachable
+        the value in the path is inf
+
+        Args:
+            src (int): source vertex
+
+        Returns:
+            []: shortest path list
         """
         visited_map = {}
         priority_q = []
