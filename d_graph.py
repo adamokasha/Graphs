@@ -3,6 +3,8 @@
 # Assignment: 6
 # Description: Graphs
 
+from collections import deque
+
 class DirectedGraph:
     """
     Class to implement directed weighted graph
@@ -122,17 +124,62 @@ class DirectedGraph:
 
 
 
+    # def dfs(self, v_start, v_end=None) -> []:
+    #     """
+    #     TODO: Write this implementation
+    #     """
+    #     pass
+
     def dfs(self, v_start, v_end=None) -> []:
         """
-        TODO: Write this implementation
+        Return list of vertices visited during DFS search
+        Vertices are picked in alphabetical order
         """
-        pass
+        if v_start > len(self.adj_matrix[0]):
+            return []
+        visited = []
+        stack = [v_start]
+        while len(stack):
+            v = stack.pop()
+            if v not in visited:
+                visited.append(v)
+                successors = self._get_adj_vertices(v)
+                if successors:
+                    successors.sort()
+                    successors.reverse()
+                    stack = stack + successors
+            if v == v_end:
+                break
+        return visited
+
+    def _get_adj_vertices(self, v):
+        adj_v_l = []
+        for j in range(len(self.adj_matrix[v])):
+            if self.adj_matrix[v][j] != 0:
+                adj_v_l.append(j)
+        return adj_v_l
 
     def bfs(self, v_start, v_end=None) -> []:
         """
-        TODO: Write this implementation
+        Return list of vertices visited during BFS search
+        Vertices are picked in alphabetical order
         """
-        pass
+        if v_start > len(self.adj_matrix[0]):
+            return []
+        visited = []
+        queue = deque([v_start])
+        while len(queue):
+            v = queue.popleft()
+            if v not in visited:
+                visited.append(v)
+                successors = self._get_adj_vertices(v)
+                if successors:
+                    successors.sort()
+                    for successor in successors:
+                        queue.append(successor)
+            if v == v_end:
+                break
+        return visited
 
     def has_cycle(self):
         """
@@ -181,13 +228,13 @@ if __name__ == '__main__':
     for path in test_cases:
         print(path, g.is_valid_path(path))
 
-    # print("\nPDF - method dfs() and bfs() example 1")
-    # print("--------------------------------------")
-    # edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
-    #          (3, 1, 5), (2, 1, 23), (3, 2, 7)]
-    # g = DirectedGraph(edges)
-    # for start in range(5):
-    #     print(f'{start} DFS:{g.dfs(start)} BFS:{g.bfs(start)}')
+    print("\nPDF - method dfs() and bfs() example 1")
+    print("--------------------------------------")
+    edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
+             (3, 1, 5), (2, 1, 23), (3, 2, 7)]
+    g = DirectedGraph(edges)
+    for start in range(5):
+        print(f'{start} DFS:{g.dfs(start)} BFS:{g.bfs(start)}')
 
     # print("\nPDF - method has_cycle() example 1")
     # print("----------------------------------")
